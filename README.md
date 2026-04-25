@@ -131,3 +131,11 @@ make flash STM32_PROG_CLI="C:\Program Files\STMicroelectronics\STM32Cube\STM32Cu
 - Фото робота: `IMG_20260404_200424.jpg`.
 - Видео демонстрации: `VID_20260219_184436.mp4`.
 
+## Контакты
+
+Рекомендованный способ связи: Telegram `@yerlan_ayapov`.
+
+Email:
+
+- `E.Ayapov@stud.satbayev.university`
+- `www.yerlan4@gmail.com`
