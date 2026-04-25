@@ -1,0 +1,14 @@
+testchannels\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/croutine.c
+testchannels\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+testchannels\croutine.o: C:\Users\wwwai\AppData\Local\Arm\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stddef.h
+testchannels\croutine.o: C:\Users\wwwai\AppData\Local\Arm\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdint.h
+testchannels\croutine.o: ../Inc/FreeRTOSConfig.h
+testchannels\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+testchannels\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+testchannels\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+testchannels\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+testchannels\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+testchannels\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+testchannels\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+testchannels\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/croutine.h
+testchannels\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h

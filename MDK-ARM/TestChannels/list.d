@@ -1,0 +1,12 @@
+testchannels\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/list.c
+testchannels\list.o: C:\Users\wwwai\AppData\Local\Arm\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdlib.h
+testchannels\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+testchannels\list.o: C:\Users\wwwai\AppData\Local\Arm\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stddef.h
+testchannels\list.o: C:\Users\wwwai\AppData\Local\Arm\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdint.h
+testchannels\list.o: ../Inc/FreeRTOSConfig.h
+testchannels\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+testchannels\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+testchannels\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+testchannels\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+testchannels\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+testchannels\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h

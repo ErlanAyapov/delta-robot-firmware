@@ -1,0 +1,300 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * File Name          : freertos.c
+  * Description        : Code for freertos applications
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2025 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+
+/* Includes ------------------------------------------------------------------*/
+#include "FreeRTOS.h"
+#include "task.h"
+#include "main.h"
+#include "cmsis_os.h"
+
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+#include "stdio.h"
+#include "tim.h"
+#include "usart.h"
+#include "gpio.h"
+#include "motor.h"
+#include "rs485.h"
+
+/* USER CODE END Includes */
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+/* USER CODE BEGIN Variables */
+
+/* USER CODE END Variables */
+osThreadId defaultTaskHandle;
+osThreadId LimitSwitchHandle;
+osThreadId ListenCommandHandle;
+
+/* Private function prototypes -----------------------------------------------*/
+/* USER CODE BEGIN FunctionPrototypes */
+/* USER CODE END FunctionPrototypes */
+
+void StartDefaultTask(void const * argument);
+void StartLimitSwitch(void const * argument);
+void StartListenCommand(void const * argument);
+
+void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
+
+/* GetIdleTaskMemory prototype (linked to static allocation support) */
+void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer, StackType_t **ppxIdleTaskStackBuffer, uint32_t *pulIdleTaskStackSize );
+
+/* USER CODE BEGIN GET_IDLE_TASK_MEMORY */
+static StaticTask_t xIdleTaskTCBBuffer;
+static StackType_t xIdleStack[configMINIMAL_STACK_SIZE];
+
+void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer, StackType_t **ppxIdleTaskStackBuffer, uint32_t *pulIdleTaskStackSize )
+{
+  *ppxIdleTaskTCBBuffer = &xIdleTaskTCBBuffer;
+  *ppxIdleTaskStackBuffer = &xIdleStack[0];
+  *pulIdleTaskStackSize = configMINIMAL_STACK_SIZE;
+  /* place for user code */
+}
+/* USER CODE END GET_IDLE_TASK_MEMORY */
+
+/**
+  * @brief  FreeRTOS initialization
+  * @param  None
+  * @retval None
+  */
+void MX_FREERTOS_Init(void) {
+  /* USER CODE BEGIN Init */
+
+  /* USER CODE END Init */
+
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+
+  /* Create the thread(s) */
+  /* definition and creation of defaultTask */
+  osThreadDef(defaultTask, StartDefaultTask, osPriorityHigh, 0, 512);
+  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+
+  /* definition and creation of LimitSwitch */
+  osThreadDef(LimitSwitch, StartLimitSwitch, osPriorityRealtime, 0, 512);
+  LimitSwitchHandle = osThreadCreate(osThread(LimitSwitch), NULL);
+
+  /* definition and creation of ListenCommand */
+  osThreadDef(ListenCommand, StartListenCommand, osPriorityRealtime, 0, 512);
+  ListenCommandHandle = osThreadCreate(osThread(ListenCommand), NULL);
+
+  /* USER CODE BEGIN RTOS_THREADS */
+  /* add threads, ... */
+  /* USER CODE END RTOS_THREADS */
+
+}
+
+/* USER CODE BEGIN Header_StartDefaultTask */
+/**
+  * @brief  Function implementing the defaultTask thread.
+  * @param  argument: Not used
+  * @retval None
+  */
+/* USER CODE END Header_StartDefaultTask */
+void StartDefaultTask(void const * argument)
+{
+  /* USER CODE BEGIN StartDefaultTask */
+	AddLog(0x1001);
+	TickType_t xLastWakeTime = xTaskGetTickCount();
+	const TickType_t xFrequency = pdMS_TO_TICKS(1);
+  /* Infinite loop */  
+  for(;;)
+  {
+		if (KEY1_pressed() == 0) {  
+				 
+				
+				is_on = 1;
+				alarm = 0;
+				ready = 1;		 
+				rs_mode=1; 
+				MotorEnable(); 
+				if (!sendedNotifactionKey) {
+					sendedNotifactionKey=1;
+					UART_SendString("KEY1 pressed > driver activated\r\n");
+					UART_SendString("Timer 8 runned\r\n"); 
+					AddLog(0x1004);
+				}
+			
+		}
+		if (KEY4_pressed() == 0) {   
+				MotorDisable();
+				UART_SendString("Timer 8 stopped\r\n"); 
+				HAL_TIM_OC_Stop_IT(&htim8,TIM_CHANNEL_1);
+				HAL_TIM_OC_Stop_IT(&htim8,TIM_CHANNEL_2);
+				HAL_TIM_OC_Stop_IT(&htim8,TIM_CHANNEL_3);
+				HAL_TIM_OC_Stop_IT(&htim8,TIM_CHANNEL_4); 
+				for (int i = 0; i < 4; i++) { 
+							reversingInProgress[i] = 0;
+				}  
+				is_on = 0; 
+				if (!sendedNotifactionKey) {
+					sendedNotifactionKey=1;
+					UART_SendString("KEY4 pressed > driver deactivated\r\n");
+					UART_SendString("All motors disabled\r\n"); 
+					AddLog(0x1007);
+				}				
+		}
+		if (KEY5_pressed() == 0) {  
+			PrintLastErrors();
+			if (!sendedNotifactionKey) {
+					sendedNotifactionKey=1;
+					UART_SendString("KEY5 pressed > display logs\r\n");
+					AddLog(0x1008);
+				}
+		}		
+			// Key2 => ???? CCW => ?????????? dir=1
+		if ((KEY2_pressed() == 0) && is_on && !alarm && ready)
+		{	  
+				rs_mode = 1;
+				time_captured = 0;
+				real_time_us = 0;  
+				//rotateForward();  // ?? ????? ?????? forward=CCW
+				//StartTrajectory();  
+				BuildProfileFromAngleSegments(angle_segments, 50, 5000);
+				
+				if (!sendedNotifactionKey) {
+					sendedNotifactionKey=1;
+					UART_SendString("KEY2 pressed > Counterclockwise\r\n");
+					AddLog(0x1005);
+				}
+		}
+
+		else if ((KEY3_pressed() == 0) && is_on && !alarm && ready)
+		{   
+				rs_mode = 1;
+				MotorStart();
+				rotateRevers();  // ?? ????? ?????? forward=CCW
+				StartTrajectory();  
+				if (!sendedNotifactionKey) {
+					sendedNotifactionKey=1;
+					UART_SendString("KEY3 pressed > Clockwise\r\n");
+					AddLog(0x1006);
+				}
+		}
+		 else if (rs_mode == 0 && (KEY3_pressed() == 1 || KEY2_pressed() == 1 ) && ready) {
+				//UART_SendString("Rotation stopped RS485 mode disabled\r\n");
+				MotorStop();
+				sendedNotifactionKey=0;			 
+		}
+    vTaskDelayUntil(&xLastWakeTime, xFrequency);
+  }
+  /* USER CODE END StartDefaultTask */
+}
+
+/* USER CODE BEGIN Header_StartLimitSwitch */
+/**
+* @brief Function implementing the LimitSwitch thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartLimitSwitch */
+void StartLimitSwitch(void const * argument)
+{
+  /* USER CODE BEGIN StartLimitSwitch */
+	AddLog(0x1002);
+	const TickType_t delay = pdMS_TO_TICKS(2);
+
+  for(;;)
+  { 
+    CheckInsideLimitSwitches();  
+     
+		for (uint8_t i = 0; i < 3; ++i)   /* ????????? 1-3 (??????? 0-2) */
+        {
+            /* ???????? ????? + ????? ???????? + ????? ??? ?? ???? */
+            if (limitSwitches[i] == 0 &&
+                g_motorRunning[i] &&
+                !reversingInProgress[i])
+            { 
+                MotorStopSingle(i);
+                vTaskDelay(pdMS_TO_TICKS(10));
+            }
+        }
+		if (limitSwitches[0] == 0 && limitSwitches[1] == 0 &&  limitSwitches[2] == 0) {
+				AddLog(0x1222);
+				int16_t oneTurn[1][3] = { { -640, -640, -640 } }; 
+				BuildProfileFromAngleSegments(oneTurn, 1, 500);
+				vTaskDelay(pdMS_TO_TICKS(500));
+				AddLog(0x1013);
+		}
+		
+		vTaskDelay(delay);
+  }
+  /* USER CODE END StartLimitSwitch */
+}
+
+/* USER CODE BEGIN Header_StartListenCommand */
+/**
+* @brief Function implementing the ListenCommand thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartListenCommand */
+void StartListenCommand(void const * argument)
+{
+  /* USER CODE BEGIN StartListenCommand */
+	AddLog(0x1003);
+	TickType_t xLastWakeTime = xTaskGetTickCount();
+	const TickType_t xFrequency = pdMS_TO_TICKS(1); 
+  /* Infinite loop */
+  for(;;)
+		{ 
+			RS485_USARTx_ProcessModbus();
+			if (is_on && ready) {
+				MotorEnable(); 
+			//	display_system_info();
+			}
+			vTaskDelayUntil(&xLastWakeTime, xFrequency); 
+		}
+  /* USER CODE END StartListenCommand */
+}
+
+/* Private application code --------------------------------------------------*/
+/* USER CODE BEGIN Application */
+void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    Motor_UpdateCompare(htim);
+}
+/* USER CODE END Application */

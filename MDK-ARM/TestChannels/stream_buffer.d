@@ -1,0 +1,14 @@
+testchannels\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c
+testchannels\stream_buffer.o: C:\Users\wwwai\AppData\Local\Arm\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdint.h
+testchannels\stream_buffer.o: C:\Users\wwwai\AppData\Local\Arm\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\string.h
+testchannels\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+testchannels\stream_buffer.o: C:\Users\wwwai\AppData\Local\Arm\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stddef.h
+testchannels\stream_buffer.o: ../Inc/FreeRTOSConfig.h
+testchannels\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+testchannels\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+testchannels\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+testchannels\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+testchannels\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+testchannels\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+testchannels\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+testchannels\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/stream_buffer.h

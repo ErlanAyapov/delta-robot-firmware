@@ -1,0 +1,15 @@
+testchannels\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/timers.c
+testchannels\timers.o: C:\Users\wwwai\AppData\Local\Arm\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdlib.h
+testchannels\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+testchannels\timers.o: C:\Users\wwwai\AppData\Local\Arm\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stddef.h
+testchannels\timers.o: C:\Users\wwwai\AppData\Local\Arm\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdint.h
+testchannels\timers.o: ../Inc/FreeRTOSConfig.h
+testchannels\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+testchannels\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+testchannels\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+testchannels\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+testchannels\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+testchannels\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+testchannels\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+testchannels\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
+testchannels\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
